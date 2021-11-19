@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+    <title>The Library</title>
+</head>
+<body style="background-color: #342627;">
+    <main class="wrap">
+        <div class="box1" style="background-color:linen;">
+            <h1 class="lr">Register</h1>
+            <form action='/create_user' method='post' class="row g-3">
+                {% with messages = get_flashed_messages(category_filter=["register"]) %}
+                    {% if messages %}
+                        {%for message in messages%}
+                            <P>{{message}}</P>
+                        {%endfor%}
+                    {%endif%}
+                {%endwith%}
+                <div class="col-12">
+                    <label for="name" class="form-label">First Name</label>
+                    <input type="text" name='first_name' class="form-control" style="background-color: white">
+                </div>
+                <div class="col-12">
+                    <label for="name" class="form-label">Last Name</label>
+                    <input type="text" name='last_name' class="form-control" style="background-color:white">
+                </div>
+                <div class="col-12">
+                    <label for="name" class="form-label">Email</label>
+                    <input type="text" name='email' class="form-control" style="background-color: white">
+                </div>
+                <div class="col-12">
+                    <label for="name" class="form-label">Password</label>
+                    <input type="password" name='password' class="form-control" style="background-color: white">
+                </div>
+                <div class="col-12">
+                    <label for="name" class="form-label">Confirm Password</label>
+                    <input type="password" name='confirm_password' class="form-control" style="background-color: white">
+                </div>
+                <br>
+                <form class="col-12">
+                    <input action='/create_user' method="POST" class="submit" type="submit" value="Register" class="btn btn-primary">
+                </form>
+            </form>    
+        </div>    
+        <div class="box2" style="background-color:linen;">
+            <h1 class="lr"> Login </h1>
+            <form action='/login' method='post' class="row g-3">
+                {% with messages = get_flashed_messages(category_filter=["login"]) %}
+                    {%if messages %}
+                        {%for message in messages%}
+                            <P>{{message}}</P>
+                        {%endfor%}
+                    {%endif%}
+                {%endwith%}
+                <div class="col-12">
+                    <label for="name" class="form-label">Email</label>
+                    <input type="text" name='email' class="form-control" style="background-color: white">
+                </div>
+                <div class="col-12">
+                    <label for="name" class="form-label">Password</label>
+                    <input type="password" name='password' class="form-control" style="background-color: white">
+                </div>
+                <form class="col-12" class="gap">
+                    <input action='/login' method="POST" class="submit" type="submit" value="Login" class="btn btn-primary">
+                </form>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

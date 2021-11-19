@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Playball&display=swap" rel="stylesheet">    
+    <title>The Library</title>
+</head>
+<body>
+    <div class="header" style="align-items: center">
+        <h1> {{user.first_name}}'s Library</h1>
+        <div class="header2">
+        <form action='/wishlist'>
+            <input class="submit4" type='submit' action='/wishlist' value='View My Wishlist'>
+        </form>
+        <form action='/dashboard'>
+            <input class="submit" type='submit' action='/dashboard' value='Home'>
+        </form>
+        <form action='/logout'>
+            <input class="submit" type='submit' action='/logout' value='Logout'>
+        </form>
+        </div>
+    </div>
+    <main class="wrap4">
+        <h1 style="text-align:center; font-size: 55px;">Edit Book</h1>
+        <div class="box">
+            <form action='/update_book' method='post' class="row g-3" style="color: linen; margin-top: 80px; margin-left: 50px; padding: 25px; font-size: 40px;">
+                <div class="one" >   
+                    <div class="col-12">
+                        {% for message in get_flashed_messages(category_filter=["error_author"]) %}
+                        <p class='error'>{{message}}</p>
+                        {%endfor%}
+                        <label for="author" class="form-label">Author</label>
+                        <input type="text" name='author' class="form-control" value="{{book.author}}">
+                    </div>
+                    <div class="col-12">
+                        {% for message in get_flashed_messages(category_filter=["error_title"]) %}
+                        <p class='error'>{{message}}</p>
+                        {%endfor%}
+                        <label for="title" style="margin-top: 20px;" class="form-label">Title:</label>
+                        <textarea type="text" name='title' class="form-control">{{book.title}}</textarea>
+                        <input type="hidden" name="book_id" value="{{book.id}}">
+                    </div>
+                </div>
+                <div class="two">
+                    <div class="col-12" style="margin-left:-20px">
+                        {% for message in get_flashed_messages(category_filter=["error_genre"]) %}
+                        <p class='error'>{{message}}</p>
+                        {%endfor%}
+                        <label> Genre:</label><textarea type="genre" id="date" name="genre" class="form-control">{{book.genre}}</textarea>
+                        <br>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="read" value="1">
+                            <label style="margin-top:-15px; font-size:35px;" class="form-check-label" for="flexCheckDefault">I've Read This</label>
+                        </div>
+                        <div class="form-check" style="margin-top:30px;">
+                            <input class="form-check-input" type="checkbox" name="read" value="0" checked>
+                            <label style="margin-top:-15px; margin-left: 53px; font-size:35px;" class="form-check-label" for="flexCheckChecked">Not Yet Read</label>
+                        </div>
+                    </div>
+                </div>
+        </div>
+                <input method="POST" class="submit" style="margin-left: 150px; margin-top: 50px;" type="submit" value="Update" class="btn btn-primary">
+    </main>  
+            </form>
+</body>
+</html>

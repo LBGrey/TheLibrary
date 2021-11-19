@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Playball&display=swap" rel="stylesheet">    
+    <title>The Library</title>
+</head>
+<body style="background-color: #342627">
+    <div class="header" style="align-items: center">
+        <h1>{{ user.first_name}}'s Library</h1>
+        <div class="header2">
+        <form action='/all_books'>
+            <input class="submit4" type='submit' action='/all_books' value='View All Books'>
+        </form>
+        <form action='/wishlist'>
+            <input class="submit4" type='submit' action='/wishlist' value='View My Wishlist'>
+        </form>
+        <form action='/dashboard'>
+            <input class="submit" type='submit' action='/dashboard' value='Home'>
+        </form>
+        <form action='/logout'>
+            <input class="submit" type='submit' action='/logout' value='Logout'>
+        </form>
+        </div>
+    </div>
+    <main class="wrap4">
+        <p class="sightings" style="color: linen; font-family: 'lato';">Add a Book</p>
+        <div class="nametable2" style="margin-top: 10px; overflow: scroll; ">
+            <form id="myForm" style="text-align: center;">
+                <label for="input">Search for:</label>
+                <input type="text" name="input" id="input">
+                <label for="choice">Author?</label>
+                <input type="checkbox" name="choice" id="choice">
+                <button type="submit">Search OpenLibrary</button>
+            </form>
+            <strong><div id="show"></div></strong>
+        </div>
+        <form action='/create_book' method="POST" style="width: 90vw; opacity: 80%; align-items:left;display:flex;font-weight: bolder; background-color: linen; text-align: center; padding: 5px; height:50px; color: black;">
+            {% for message in get_flashed_messages(category_filter=["error_author"]) %}
+            <p class='error'>{{message}}</p>
+            {%endfor%}
+            <label>Author</label>
+            <input type="text" name="author" style="width: 200px;">
+            {% for message in get_flashed_messages(category_filter=["error_title"]) %}
+            <p class='error'>{{message}}</p>
+            {%endfor%}
+            <label>Title</label>
+            <input type="text" name="title" style="width:200px;">
+            {% for message in get_flashed_messages(category_filter=["error_genre"]) %}
+            <p class='error'>{{message}}</p>
+            {%endfor%}
+            <label>Genre</label>
+            <input type="text" name="genre" style="width:150px;">
+            <div style="display:flex;">
+                <label>I'veReadThis</label>
+                <strong><input style="margin-left:8px; margin-top: 0px; width:35px; height:35px;" type="checkbox" name="read" class="form-control check" value="1"></strong>
+            </div>
+            <strong><input action='/create_book' method="POST" class="submit2" type="submit" style="width: 150px; margin-top:4px;" value="Add Your Own" class="btn btn-primary"></strong>
+        </form>
+    </main>
+<script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
+
+<script type="text/javascript" src="https://www.google.com/books/jsapi.js"></script>
+
+<script type="text/javascript">
+google.books.load();
+function view() {
+    viewer = new google.books.DefaultViewer(document.getElementById('viewerCanvas'));
+    viewer.load('ISBN:0738531367');
+}
+google.books.setOnLoadCallback(view);
+
+
+</script>
+<div id="viewerCanvas" style="width: 600px; height: 500px"></div>

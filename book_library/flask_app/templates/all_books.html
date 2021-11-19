@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Playball&display=swap" rel="stylesheet">
+    <title>The Library</title>
+</head>
+<body style="background-color: #342627;">
+    <div class="header" style="align-items: center">
+        <h1>{{ user.first_name}}'s Library</h1>
+        <div class="header2">
+        <form action='/wishlist'>
+            <input class="submit4" type='submit' action='/wishlist' value='View My Wishlist'>
+        </form>
+        <form action='/dashboard'>
+            <input class="submit" type='submit' action='/dashboard' value='Home'>
+        </form>
+        <form action='/book/new'>
+            <input class="submit" type='submit' action='/book/new' value='Search'>
+        </form>
+            <form action='/logout'>
+                <input class="submit" type='submit' action='/logout' value='Logout'>
+            </form>
+        </div>
+    </div>
+    <div class="photo">
+    <p class="sightings" style="color: linen; font-family: 'lato';">All Books</p>
+    <main class="wrap3">
+        <div style="overflow: scroll" class="nametable">
+            {% if all_books_all %}
+            {% for books in all_books_all %}
+            <div style="display:flex; height: 25px;">
+                <p style="font-size: 18px; width: 300px;">{{ books.author }}</p>
+                <p style="font-size: 18px; width: 500px;">{{ books.title }}</p>
+                <p style="font-size: 12px; width: 50px; margin-top: -3px; margin-left: 0px">{{ books.read | replace (1, 'Been Read') | replace (0, 'Not Read') }}</p>
+                <p style="margin-right:0px; display:flex">
+                <div style="margin-right: 0px; display:flex; width: 200px; margin-left:-30px; justify-content: right">
+                    <form action='/show/{{books.id}}'>
+                        <input type="hidden" name="book_genre" value="{{books.genre}}">
+                        <input style="margin-top:-5px;" type="submit" class="show solid" value="Details">
+                    </form>
+                    <form action='/book/{{books.id}}/edit'>
+                        <input style="margin-top:-5px;" type="submit" class="show solid" value="Edit">
+                    </form><form action="/delete_book" method='POST'>
+                        <input type="hidden" name="book_id" value="{{books.id}}">
+                        <input style="margin-top:-5px;" type="submit" class="show solid" value="Delete">
+                    </form>
+                </div>
+            </p>
+        </div>
+        <hr>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <form method="POST" id="searchForm" style="text-align: center; margin-top: 5px; margin-bottom: 5px;">
+            <input style="text-align: center; font-size: 20px; width: 300px; background-color: linen; opacity: 80%; border-radius:10px;" type="search" name="search" placeholder=" keyword, author, title, genre">
+            <input type="submit" class="searchmine" value=" Search All Books">
+        </form>
+    <div style="overflow: scroll" id="results" class="nametable3">
+        {% if all_books_search %}
+        {% for books in all_books_search %}
+        <div style="display:flex; height: 25px;">
+            <p style="font-size: 18px; width: 300px;">{{ books.author }}</p>
+            <p style="font-size: 18px; width: 500px;">{{ books.title }}</p>
+            <p style="font-size: 12px; width: 50px; margin-top: -3px; margin-left: 0px">{{ books.read | replace (1, 'Been Read') | replace (0, 'Not Read') }}</p>
+            <p style="margin-right:0px; display:flex">
+            <div style="margin-right: 0px; display:flex; width: 200px; margin-left:-30px; justify-content: right">
+                <form action='/show/{{books.id}}'>
+                    <input type="hidden" name="book_genre" value="{{books.genre}}">
+                    <input type="submit" class="show solid" value="Details">
+                </form>
+                <form action='/book/{{books.id}}/edit'>
+                    <input type="submit" class="show solid" value="Edit">
+                </form><form action="/delete_book" method='POST'>
+                    <input type="hidden" name="book_id" value="{{books.id}}">
+                    <input type="submit" class="show solid" value="Delete">
+                </form>
+            </div>
+            </p>
+        </div>
+    <hr>
+        {% endfor %}
+        {% endif %}
+        </div>
+    </div>
+<script>var searchForm = document.getElementById("searchForm")
+    searchForm.onsubmit = (e) => {
+        e.preventDefault()
+        var form = new FormData(searchForm)
+        
+        fetch('http://localhost:5000/search_books', { method:"POST", body:form})
+            .then(res => res.json())
+            .then(res => create_list(res.books))
+    }
+    
+    
+    function create_list(dataarray){
+        var results = document.getElementById("results")
+        results.innerHTML = ""
+        for (const data of dataarray){
+            console.log(data)
+            results.innerHTML += `
+            <div style="display:flex; height: 40px;">
+                <p style="font-size: 18px; width: 300px;">${data.author}</p>
+                <p style="font-size: 18px; width: 500px;">${data.title}</p>
+                <p style="font-size: 12px; width: 50px; margin-top: -3px; margin-left: 0px; display:flex"> ${ data.read === 1 ? "Been Read" :  "Not Read"} </p>
+                <p style="margin-right:0px; display:flex">
+                <div style="margin-right: 0px; display:flex; width: 200px; margin-left:-30px; justify-content: right">
+                    <form action='/show/${data.id}'>
+                        <input type="hidden" name="book_genre" value="${data.genre}">
+                        <input style="margin-top:-5px;" type="submit" class="show solid" value="Details">
+                    </form>
+                    <form action='/book/${data.id}/edit'>
+                        <input style="margin-top:-5px;" type="submit" class="show solid" value="Edit">
+                    </form><form action="/delete_book" method='POST'>
+                        <input type="hidden" name="book_id" value="${data.id}">
+                        <input style="margin-top:-5px;" type="submit" class="show solid" value="Delete">
+                    </form>
+                </div>
+                </p>
+                <hr>
+            </div>
+            `
+        }
+    }</script>
+
+</body>
+</html>

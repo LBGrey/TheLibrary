@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Playball&display=swap" rel="stylesheet">    
+    <title>The Library</title>
+</head>
+<body>
+    <div class="header" style="align-items: center">
+        <h1>{{ user.first_name}}'s Library</h1>
+        <div class="header2">
+            <form action='/wishlist'>
+                <input class="submit4" type='submit' action='/wishlist' value='View My Wishlist'>
+            </form>
+            <form action='/dashboard'>
+                <input class="submit" type='submit' action='/dashboard' value='Home'>
+            </form>
+            <form action='/book/new'>
+                <input class="submit" type='submit' action='/book/new' value='Search'>
+            </form>
+            <form action='/logout'>
+                <input class="submit" type='submit' action='/logout' value='Logout'>
+            </form>
+        </div>
+    </div>
+    <h5></h5>
+    <main class="wrap5">
+        <div class="boxed">
+            <form action='/add_library' action='/add_wishlist' method='POST'>
+            <p>Author: {{book.author}}</p>
+            <br>
+            <div>
+            <p>Title: {{book.title}} </p>
+            </div>
+            <br>
+            <p>Genre: {{book.genre}}</p>
+            <br>
+            <p>Have I Read This?  {{book.read | replace (1, 'Yes') | replace (0, 'No') }}</p>
+
+        </div> 
+        <div style="display:flex; margin-top:430px; margin-left: -1090px;">
+            <form action='/add_library' method="POST">
+                <input class="submit5" type='submit' value='Add to My Library'>
+                <input type="hidden" name="book_id" value="{{book.id}}">
+            </form>
+            <form action='/add_wishlist' method="POST">
+                <input class="submit5" type='submit' action='/add_wishlist' value='Add to My Wishlist'>
+                <input type="hidden" name="book_id" value="{{book.id}}">
+            </form>
+        </div>
+            </form>
+        <form action='/book/{{book.id}}/edit'>
+            <input type="submit" class="show solid" value="Edit" style="margin-left: -960px; background-color: rgb(28, 101, 143, 1); margin-top:380px;">
+            <input type="hidden" name="book_id" value="{{book.id}}">
+        </form>
+    </main>
+</body>
+</html>
